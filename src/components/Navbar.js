@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 import logo from "../logo.svg";
+import { ButtonContainer } from "./Button";
 
 const Navbar = () => {
   return (
@@ -18,10 +20,12 @@ const Navbar = () => {
         </li>
       </ul>
       <Link to="/cart" className="ml-auto">
-        <button>
-          <i className="fas fa-cart-plus" />
-          My Cart
-        </button>
+        <ButtonContainer>
+          <span className="mr-2">
+            <i className="fas fa-cart-plus" />
+          </span>
+          my cart
+        </ButtonContainer>
       </Link>
     </nav>
   );
