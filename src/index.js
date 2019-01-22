@@ -3,12 +3,16 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./index.css";
 import App from "./App";
+import { DataProvider } from "./context";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
+  // Distribute data from context to all elements
+  <DataProvider>
+    <Router>
+      <App />
+    </Router>
+  </DataProvider>,
   document.getElementById("root")
 );
 
