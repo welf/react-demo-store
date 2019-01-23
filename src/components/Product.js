@@ -111,6 +111,10 @@ const ProductCard = styled.div`
     color: var(--mainBlue);
     cursor: pointer;
   }
+
+  .cart-btn:focus {
+    outline: none;
+  }
 `;
 
 export default Product;
