@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Product = ({ product }) => {
+const Product = ({ product, addToCart }) => {
   const { id, title, img, price, inCart } = product;
   return (
     <ProductCard className="mx-auto col-9 col-md-6 col-lg-3 my-3">
@@ -16,7 +16,7 @@ const Product = ({ product }) => {
           </Link>
           <button
             className="cart-btn"
-            onClick={() => console.log(`Product ${id} was added to cart`)}
+            onClick={() => addToCart(id)}
             disabled={inCart ? true : false}
           >
             {inCart ? (

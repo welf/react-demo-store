@@ -11,9 +11,15 @@ const ProductList = () => {
         <Title name="our" title="products" />
         <div className="row">
           <DataConsumer>
-            {({ products }) =>
+            {({ products, addToCart }) =>
               products.map(product => {
-                return <Product key={product.id} product={product} />;
+                return (
+                  <Product
+                    key={product.id}
+                    product={product}
+                    addToCart={addToCart}
+                  />
+                );
               })
             }
           </DataConsumer>
