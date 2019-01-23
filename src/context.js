@@ -11,7 +11,7 @@ class DataProvider extends React.Component {
 
   render() {
     return (
-      <DataStore.Provider value={this.state}>
+      <DataStore.Provider value={{ ...this.state }}>
         {this.props.children}
       </DataStore.Provider>
     );

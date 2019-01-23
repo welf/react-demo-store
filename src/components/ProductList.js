@@ -6,15 +6,18 @@ import { DataConsumer } from "../context";
 
 const ProductList = () => {
   return (
-    <section className="container py-3">
-      <Title name="our" title="products" />
-      <div className="row">
-        <DataConsumer>
-          {({ products }) => {
-            return <h1>{products[0].title}</h1>;
-          }}
-        </DataConsumer>
-        <Product />
+    <section className="py-5">
+      <div className="container">
+        <Title name="our" title="products" />
+        <div className="row">
+          <DataConsumer>
+            {({ products }) =>
+              products.map(product => {
+                return <Product key={product.id} product={product} />;
+              })
+            }
+          </DataConsumer>
+        </div>
       </div>
     </section>
   );
