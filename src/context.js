@@ -4,18 +4,11 @@ import { storeProducts } from "./data";
 
 const DataStore = React.createContext();
 
+const initialProductsState = storeProducts.map(item => ({ ...item }));
+
 class DataProvider extends React.Component {
   state = {
-    products: []
-  };
-
-  setProducts = () => {
-    const products = storeProducts.map(item => ({ ...item }));
-    this.setState({ products });
-  };
-
-  componentDidMount = () => {
-    this.setProducts();
+    products: initialProductsState
   };
 
   render() {
