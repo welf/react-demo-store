@@ -14,7 +14,10 @@ const App = () => {
       <Navbar />
       <Switch>
         <Route exact path="/" component={ProductList} />
-        <Route path="/details" component={Details} />
+        <Route
+          path="/details/:id"
+          render={({ match }) => <Details id={match.params.id} />}
+        />
         <Route path="/cart" component={Cart} />
         <Route component={Default} />
       </Switch>
