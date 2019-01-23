@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { DataConsumer } from "../context";
+import PropTypes from "prop-types";
 
 const Product = ({ product }) => {
   const { id, title, img, price, inCart } = product;
@@ -41,6 +41,16 @@ const Product = ({ product }) => {
       </div>
     </ProductCard>
   );
+};
+
+Product.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    img: PropTypes.string,
+    price: PropTypes.number,
+    inCart: PropTypes.bool
+  }).isRequired
 };
 
 const ProductCard = styled.div`
