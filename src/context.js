@@ -6,7 +6,16 @@ const DataStore = React.createContext();
 
 class DataProvider extends React.Component {
   state = {
-    products: storeProducts
+    products: []
+  };
+
+  setProducts = () => {
+    const products = storeProducts.map(item => ({ ...item }));
+    this.setState({ products });
+  };
+
+  componentDidMount = () => {
+    this.setProducts();
   };
 
   render() {
