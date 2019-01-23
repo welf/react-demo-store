@@ -8,14 +8,11 @@ const Product = ({ product }) => {
   return (
     <ProductCard className="mx-auto col-9 col-md-6 col-lg-3 my-3">
       <div className="card">
-        <div
-          className="img-container p-5"
-          onClick={() =>
-            console.log(`you clicked the product card with id ${id}`)
-          }
-        >
+        <div className="img-and-button-container">
           <Link to={"/details/" + id}>
-            <img src={img} alt={title} className="card-img-top" />
+            <div className="img-container p-5">
+              <img src={img} alt={title} className="card-img-top" />
+            </div>
           </Link>
           <button
             className="cart-btn"
@@ -76,6 +73,15 @@ const ProductCard = styled.div`
     }
   }
 
+  .img-and-button-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .img-and-button-container:hover .cart-btn {
+    transform: translate(0, 0);
+  }
+
   .img-container {
     position: relative;
     overflow: hidden;
@@ -101,10 +107,11 @@ const ProductCard = styled.div`
     border-radius: 0.5rem 0 0 0;
     transform: translate(100%, 100%);
     transition: all 0.5s linear;
+    z-index: 100;
   }
 
-  .img-container:hover .cart-btn {
-    transform: translate(0, 0);
+  .img-container:hover {
+    cursor: pointer;
   }
 
   .cart-btn:hover {
