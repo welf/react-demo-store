@@ -26,3 +26,33 @@ body {
 .text-bright {
   color: var(--lightBlue);
 }
+
+.title-in-cart {
+  font-size: 1.2rem;
+}
+
+.btn-black {
+  /* we need to use !important flag to override default bootstrap settings */
+  font-size: 0.8rem !important;
+  border: 0.1rem solid var(--mainDark) !important;
+  background: transparent;
+  text-transform: capitalize;
+  color: var(--mainDark);
+}
+
+.btn-black:hover {
+  background: var(--mainDark);
+  color: var(--mainWhite) !important;
+}
+
+.count {
+  background: var(--lightBlue) !important;
+  color: var(--mainWhite) !important;
+  cursor: auto !important;
+}
+
+.remove-item {
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--mainYellow) !important;
+}

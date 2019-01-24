@@ -16,7 +16,7 @@ const Modal = () => {
 
   return (
     <DataConsumer>
-      {({ productInModal, closeModal }) => {
+      {({ productInModal, closeModal, history }) => {
         const { title, img, price } = productInModal;
         return (
           <ModalContainer
@@ -34,17 +34,25 @@ const Modal = () => {
                   <img src={img} alt={title} className="img-fluid" />
                   <h5>{title}</h5>
                   <h5 className="text-muted">price: ${price}</h5>
+                  {/* main buttons */}
                   <Link to="/">
                     <ButtonContainer onClick={closeModal}>
                       to shopping
                     </ButtonContainer>
-                    <ButtonContainer cart>
-                      <span>
-                        <i className="fas fa-credit-card mr-2" />
-                        go to cart
-                      </span>
-                    </ButtonContainer>
                   </Link>
+                  <ButtonContainer
+                    onClick={() => {
+                      closeModal();
+                      history.push("/cart");
+                    }}
+                    cart
+                  >
+                    <span>
+                      <i className="fas fa-credit-card mr-2" />
+                      go to cart
+                    </span>
+                  </ButtonContainer>
+                  {/* end of main buttons */}
                 </div>
               </div>
             </div>

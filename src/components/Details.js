@@ -7,7 +7,7 @@ const Details = props => {
   const id = parseInt(props.id, 10);
   return (
     <DataConsumer>
-      {({ products, addToCart }) => {
+      {({ products, addToCart, history }) => {
         const product = products.find(item => item.id === id);
         const { title, img, company, info, price, inCart } = product;
 
@@ -50,8 +50,10 @@ const Details = props => {
                 </Link>
                 <ButtonContainer
                   cart
-                  onClick={() => addToCart(id)}
-                  disabled={inCart ? true : false}
+                  onClick={
+                    inCart ? () => history.push("/cart") : () => addToCart(id)
+                  }
+                  // disabled={inCart ? true : false}
                 >
                   {inCart ? (
                     <span>

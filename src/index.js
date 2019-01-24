@@ -8,11 +8,11 @@ import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   // Distribute data from context to all elements
-  <DataProvider>
-    <Router>
+  <Router>
+    <DataProvider>
       <App />
-    </Router>
-  </DataProvider>,
+    </DataProvider>
+  </Router>,
   document.getElementById("root")
 );
 
