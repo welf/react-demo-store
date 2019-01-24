@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Product = ({ product, addToCart }) => {
+const Product = ({ product, addToCart, openModal }) => {
   const { id, title, img, price, inCart } = product;
   return (
     <ProductCard className="mx-auto col-9 col-md-6 col-lg-3 my-3">
@@ -16,7 +16,10 @@ const Product = ({ product, addToCart }) => {
           </Link>
           <button
             className="cart-btn"
-            onClick={() => addToCart(id)}
+            onClick={async () => {
+              await addToCart(id);
+              openModal(id);
+            }}
             disabled={inCart ? true : false}
           >
             {inCart ? (
@@ -107,7 +110,7 @@ const ProductCard = styled.div`
     border-radius: 0.5rem 0 0 0;
     transform: translate(100%, 100%);
     transition: all 0.5s linear;
-    z-index: 100;
+    z-index: 50;
   }
 
   .img-container:hover {

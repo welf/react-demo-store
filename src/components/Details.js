@@ -12,7 +12,7 @@ const Details = props => {
         const { title, img, company, info, price, inCart } = product;
 
         return (
-          <section className="container py-5">
+          <section className="container py-3">
             {/* title */}
             <div className="row">
               <div className="col-10 mx-auto text-center text-slanted text-blue my-5">
@@ -24,24 +24,24 @@ const Details = props => {
             {/* product info */}
             <div className="row">
               {/* left column */}
-              <div className="col-10 col-md-6 mx-auto my-3">
+              <div className="col-10 col-md-6 mx-auto my-2">
                 <img src={`/${img}`} alt={title} className="img-fluid" />
               </div>
               {/* end of left column */}
 
               {/* right column */}
-              <div className="col-10 col-md-6 mx-auto my-3 text-capitalize">
-                <h2>Model: {title}</h2>
-                <h4 className="text-title text-uppercase text-muted mt-3 mb-2">
+              <div className="col-10 col-md-6 mx-auto my-2">
+                <h2 className="text-capitalize">Model: {title}</h2>
+                <h4 className="text-title text-uppercase text-muted mt-3 mb-3">
                   made by: <span>{company}</span>
                 </h4>
-                <h4 className="text-blue">
+                <h3 className="text-blue text-capitalize">
                   <strong>
                     price: <span>$</span>
                     {price}
                   </strong>
-                </h4>
-                <p className="text-capitalize font-weight-bold mt-3 mb-0">
+                </h3>
+                <p className="lead text-capitalize font-weight-bold mt-3 mb-0">
                   some info about product:
                 </p>
                 <p className="lead text-muted">{info}</p>

@@ -11,13 +11,14 @@ const ProductList = () => {
         <Title name="our" title="products" />
         <div className="row">
           <DataConsumer>
-            {({ products, addToCart }) =>
+            {({ products, addToCart, openModal }) =>
               products.map(product => {
                 return (
                   <Product
                     key={product.id}
                     product={product}
                     addToCart={addToCart}
+                    openModal={openModal}
                   />
                 );
               })
