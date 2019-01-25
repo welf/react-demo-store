@@ -6,8 +6,9 @@ export const ButtonContainer = styled.button`
   background: transparent;
   border: 0.05rem solid var(--lightBlue);
   border-color: ${props =>
-    props.cart ? "var(--mainYellow)" : "var(--lightBlue)"};
-  color: ${props => (props.cart ? "var(--mainYellow)" : "var(--lightBlue)")};
+    props.cart || props.itemsInCart ? "var(--mainYellow)" : "var(--lightBlue)"};
+  color: ${props =>
+    props.cart || props.itemsInCart ? "var(--mainYellow)" : "var(--lightBlue)"};
   border-radius: 0.5rem;
   padding: 0.2rem 0.5rem;
   cursor: pointer;
@@ -15,7 +16,9 @@ export const ButtonContainer = styled.button`
   transition: all 0.5s ease-in-out;
   &:hover {
     background-color: ${props =>
-      props.cart ? "var(--mainYellow)" : "var(--lightBlue)"};
+      props.cart || props.itemsInCart
+        ? "var(--mainYellow)"
+        : "var(--lightBlue)"};
     color: var(--mainBlue);
   }
   &:focus {

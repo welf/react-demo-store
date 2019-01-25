@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const CartItem = ({ item, value }) => {
   const { id, title, img, price, count, total } = item;
-  const { incrementCount, decrementCount, removeItem, clearCart } = value;
+  const { incrementCount, decrementCount, removeItem } = value;
   return (
     <div className="row text-center text-capitalize mb-4">
       <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
@@ -23,7 +23,7 @@ const CartItem = ({ item, value }) => {
         </Link>
       </div>
       <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
-        <span className="d-lg-none">price: </span>${price.toFixed(2)}
+        <span className="d-lg-none">price: </span>$ {price.toFixed(2)}
       </div>
       {/* increment and decrement buttons */}
       <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
@@ -45,13 +45,12 @@ const CartItem = ({ item, value }) => {
       </div>
       {/* end of increment and decrement buttons */}
       <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
-        <i
-          className="fas fa-trash remove-item"
-          onClick={() => removeItem(id)}
-        />
+        <div onClick={() => removeItem(id)}>
+          <i className="fas fa-trash-alt remove-item" />
+        </div>
       </div>
       <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
-        <span className="d-lg-none">item total: </span>${total.toFixed(2)}
+        <span className="d-lg-none">item total: </span>$ {total.toFixed(2)}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@
   --mainWhite: #f3f3f3;
   --mainDark: #232528;
   --mainYellow: #ffa400;
+  --mainRed: #ff0000;
 }
 
 body {
@@ -54,5 +55,5 @@ body {
 .remove-item {
   font-size: 1.3rem;
   cursor: pointer;
-  color: var(--mainYellow) !important;
+  color: var(--mainRed) !important;
 }

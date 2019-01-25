@@ -21,10 +21,10 @@ class DataProviderWithRouter extends React.Component {
   // Tax rate
   _tax = 0.22;
 
-  // helper function for other functions
+  // =====
+  // helper functions for other functions of this component
   getProductById = (array, id) => array.find(product => product.id === id);
 
-  // helper function for other functions
   increaseCount = (arr, id) => {
     return arr.map(i => {
       if (i.id === id) {
@@ -39,7 +39,6 @@ class DataProviderWithRouter extends React.Component {
     });
   };
 
-  // helper function for other functions
   decreaseCount = (arr, id) => {
     return arr.map(i => {
       if (i.id === id) {
@@ -57,24 +56,38 @@ class DataProviderWithRouter extends React.Component {
     });
   };
 
-  // helper function for other functions
-  calculateCartSubTotal = arr =>
-    arr.reduce((accumulator, product) => accumulator + product.total, 0);
-
-  addToCart = id => {
+  updateCartTotals = () => {
     this.setState(prevState => {
-      const products = this.increaseCount(prevState.products, id);
-
-      const productForCart = this.getProductById(products, id);
-
-      const cart = [...prevState.cart, productForCart];
-
-      const cartSubTotal = this.calculateCartSubTotal(cart);
+      const cartSubTotal = prevState.cart.reduce(
+        (accumulator, product) => accumulator + product.total,
+        0
+      );
       const cartTax = cartSubTotal * this._tax;
       const cartTotal = cartSubTotal + cartTax;
 
-      return { ...prevState, products, cart, cartSubTotal, cartTax, cartTotal };
+      return {
+        cartSubTotal,
+        cartTax,
+        cartTotal
+      };
     });
+  };
+
+  // =====
+  // functions for other components
+  addToCart = id => {
+    this.setState(
+      prevState => {
+        const products = this.increaseCount(prevState.products, id);
+
+        const productForCart = this.getProductById(products, id);
+
+        const cart = [...prevState.cart, productForCart];
+
+        return { ...prevState, products, cart };
+      },
+      () => this.updateCartTotals()
+    );
   };
 
   openModal = id => {
@@ -95,59 +108,53 @@ class DataProviderWithRouter extends React.Component {
   };
 
   incrementCount = id => {
-    this.setState(prevState => {
-      const products = this.increaseCount(prevState.products, id);
-      const cart = this.increaseCount(prevState.cart, id);
+    this.setState(
+      prevState => {
+        const products = this.increaseCount(prevState.products, id);
+        const cart = this.increaseCount(prevState.cart, id);
 
-      const cartSubTotal = this.calculateCartSubTotal(cart);
-      const cartTax = cartSubTotal * this._tax;
-      const cartTotal = cartSubTotal + cartTax;
-      return {
-        ...prevState,
-        products,
-        cart,
-        cartSubTotal,
-        cartTax,
-        cartTotal
-      };
-    });
+        return {
+          ...prevState,
+          products,
+          cart
+        };
+      },
+      () => this.updateCartTotals()
+    );
   };
 
   decrementCount = id => {
-    this.setState(prevState => {
-      const products = this.decreaseCount(prevState.products, id);
-      const cart = this.decreaseCount(prevState.cart, id);
-      const filteredCart = cart.filter(product => product.count > 0);
-      const cartSubTotal = this.calculateCartSubTotal(filteredCart);
-      const cartTax = cartSubTotal * this._tax;
-      const cartTotal = cartSubTotal + cartTax;
+    this.setState(
+      prevState => {
+        const products = this.decreaseCount(prevState.products, id);
+        const cart = this.decreaseCount(prevState.cart, id);
+        const filteredCart = cart.filter(product => product.count > 0);
 
-      return {
-        ...prevState,
-        products,
-        cart: filteredCart,
-        cartSubTotal,
-        cartTax,
-        cartTotal
-      };
-    });
+        return {
+          ...prevState,
+          products,
+          cart: filteredCart
+        };
+      },
+      () => this.updateCartTotals()
+    );
   };
 
   removeItem = id => {
-    this.setState(prevState => {
-      const products = prevState.products.map(product => {
-        if (product.id === id) {
-          return { ...product, inCart: false, count: 0, total: 0 };
-        }
-        return { ...product };
-      });
-      const cart = prevState.cart.filter(product => product.id !== id);
-      const cartSubTotal = this.calculateCartSubTotal(cart);
-      const cartTax = cartSubTotal * this._tax;
-      const cartTotal = cartSubTotal + cartTax;
+    this.setState(
+      prevState => {
+        const products = prevState.products.map(product => {
+          if (product.id === id) {
+            return { ...product, inCart: false, count: 0, total: 0 };
+          }
+          return { ...product };
+        });
+        const cart = prevState.cart.filter(product => product.id !== id);
 
-      return { ...prevState, products, cart, cartSubTotal, cartTax, cartTotal };
-    });
+        return { ...prevState, products, cart };
+      },
+      () => this.updateCartTotals()
+    );
   };
 
   clearCart = () => {
@@ -170,9 +177,9 @@ class DataProviderWithRouter extends React.Component {
     });
   };
 
-  componentDidMount = () => {
-    this.addToCart(1);
-  };
+  // =====
+  // life cycle functions
+  componentDidMount = () => {};
 
   render() {
     const { match, history, location } = this.props;

@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import logo from "../logo.svg";
 import { ButtonContainer } from "./Button";
+import { DataConsumer } from "../context";
 
 const Navbar = () => {
   return (
@@ -20,14 +21,25 @@ const Navbar = () => {
           </Link>
         </li>
       </ul>
-      <Link to="/cart" className="ml-auto">
-        <ButtonContainer>
-          <span className="mr-2">
-            <i className="fas fa-cart-plus" />
-          </span>
-          my cart
-        </ButtonContainer>
-      </Link>
+      <DataConsumer>
+        {({ cart }) => {
+          const itemsInCart = cart.reduce(
+            (acc, product) => acc + product.count,
+            0
+          );
+          return (
+            <Link to="/cart" className="ml-auto">
+              <ButtonContainer itemsInCart={cart.length === 0 ? false : true}>
+                <span className="mr-2">
+                  <i className="fas fa-cart-plus" />
+                </span>
+                my cart
+                {cart.length === 0 ? null : ` (${itemsInCart})`}
+              </ButtonContainer>
+            </Link>
+          );
+        }}
+      </DataConsumer>
     </NavWrapper>
   );
 };
