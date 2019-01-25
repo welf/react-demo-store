@@ -25,8 +25,7 @@ const PayPalButton = ({ value }) => {
   let currency = "USD"; // or you can set this value from your props or state
 
   const client = {
-    sandbox:
-      "AeDWkLwUw9EOkjjkmEeWYtDfVzSWYH0SGafdw3xX_nK-q7U-EaLJrdaF_J6vT3CpnOD6p7Er3WJe-wj4",
+    sandbox: process.env.REACT_APP_PAYPAL_ID,
     production: "YOUR-PRODUCTION-APP-ID"
   };
   // In order to get production's app-ID, you will have to send your app to Paypal for approval first
