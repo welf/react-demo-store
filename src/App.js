@@ -10,6 +10,7 @@ import Default from "./components/Default";
 import Modal from "./components/Modal";
 import { DataConsumer } from "./context";
 import { Switch, Route } from "react-router-dom";
+import PaymentNotification from "./components/PaymentNotification";
 
 const App = () => {
   return (
@@ -25,7 +26,13 @@ const App = () => {
         <Route component={Default} />
       </Switch>
       <DataConsumer>
-        {({ isModalOpen }) => (isModalOpen ? <Modal /> : null)}
+        {({ isModalOpen, paymentSuccess, paymentCancelled, paymentError }) =>
+          isModalOpen ? (
+            <Modal />
+          ) : paymentSuccess || paymentCancelled || paymentError ? (
+            <PaymentNotification />
+          ) : null
+        }
       </DataConsumer>
     </React.Fragment>
   );

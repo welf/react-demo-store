@@ -11,9 +11,9 @@ const Default = props => {
           <h2>page not found</h2>
           <h4>
             the requested URL
-            <span className="text-danger">{` ...${
-              props.location.pathname
-            }`}</span>{" "}
+            <span className="text-danger">
+              {` ...${props.location.pathname}`}
+            </span>{" "}
             does not exist
           </h4>
         </div>

@@ -1,19 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import { ButtonContainer } from "./Button";
 import { DataConsumer } from "../context";
+import { ModalContainer, closeIfClickIsOutOfElement } from "./ModalContainer";
 
 const Modal = () => {
-  const closeIfClickIsOutOfElement = (event, elementId, fn) => {
-    const parentElement = document.getElementById(elementId);
-
-    if (parentElement.contains(event.target)) {
-      return;
-    }
-    fn();
-  };
-
   return (
     <DataConsumer>
       {({ productInModal, closeModal, history }) => {
@@ -62,22 +53,5 @@ const Modal = () => {
     </DataConsumer>
   );
 };
-
-const ModalContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 100;
-
-  #modal {
-    background: var(--mainWhite);
-  }
-`;
 
 export default Modal;

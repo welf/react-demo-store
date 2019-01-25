@@ -11,6 +11,11 @@ class DataProviderWithRouter extends React.Component {
   state = {
     products: initialProductsState,
     cart: [],
+    orders: [],
+    isAfterPaymentModalOpen: false,
+    paymentSuccess: false,
+    paymentCancelled: false,
+    paymentError: false,
     isModalOpen: false,
     productInModal: null,
     cartSubTotal: 0,
@@ -24,6 +29,9 @@ class DataProviderWithRouter extends React.Component {
   // =====
   // helper functions for other functions of this component
   getProductById = (array, id) => array.find(product => product.id === id);
+
+  // All objects are copying by reference, so we need to destructure them to achieve immutability
+  spreadAllObjects = objectArray => objectArray.map(item => ({ ...item }));
 
   increaseCount = (arr, id) => {
     return arr.map(i => {
@@ -73,6 +81,22 @@ class DataProviderWithRouter extends React.Component {
     });
   };
 
+  removeAllProductsFromCart = arr => {
+    return arr.map(product => ({
+      ...product,
+      inCart: false,
+      count: 0,
+      total: 0
+    }));
+  };
+
+  clearPaymentInfo = () =>
+    this.setState({
+      paymentSuccess: false,
+      paymentError: false,
+      paymentCancelled: false
+    });
+
   // =====
   // functions for other components
   addToCart = id => {
@@ -84,7 +108,7 @@ class DataProviderWithRouter extends React.Component {
 
         const cart = [...prevState.cart, productForCart];
 
-        return { ...prevState, products, cart };
+        return { products, cart };
       },
       () => this.updateCartTotals()
     );
@@ -103,6 +127,7 @@ class DataProviderWithRouter extends React.Component {
     this.setState(prevState => ({
       ...prevState,
       isModalOpen: false,
+      isAfterPaymentModalOpen: false,
       productInModal: null
     }));
   };
@@ -114,7 +139,6 @@ class DataProviderWithRouter extends React.Component {
         const cart = this.increaseCount(prevState.cart, id);
 
         return {
-          ...prevState,
           products,
           cart
         };
@@ -131,7 +155,6 @@ class DataProviderWithRouter extends React.Component {
         const filteredCart = cart.filter(product => product.count > 0);
 
         return {
-          ...prevState,
           products,
           cart: filteredCart
         };
@@ -151,7 +174,7 @@ class DataProviderWithRouter extends React.Component {
         });
         const cart = prevState.cart.filter(product => product.id !== id);
 
-        return { ...prevState, products, cart };
+        return { products, cart };
       },
       () => this.updateCartTotals()
     );
@@ -159,15 +182,9 @@ class DataProviderWithRouter extends React.Component {
 
   clearCart = () => {
     this.setState(prevState => {
-      const products = prevState.products.map(product => ({
-        ...product,
-        inCart: false,
-        count: 0,
-        total: 0
-      }));
+      const products = this.removeAllProductsFromCart(prevState.products);
 
       return {
-        ...prevState,
         products,
         cart: [],
         cartSubTotal: 0,
@@ -177,10 +194,47 @@ class DataProviderWithRouter extends React.Component {
     });
   };
 
+  onPaymentSuccess = ({ payerID, paymentID, paymentToken, email, address }) => {
+    this.setState(
+      prevState => {
+        const products = this.removeAllProductsFromCart(prevState.products);
+        const orderItems = this.removeAllProductsFromCart(
+          this.spreadAllObjects(prevState.cart)
+        );
+        const order = {
+          payerID,
+          paymentID,
+          paymentToken,
+          email,
+          address,
+          orderItems,
+          orderSubTotal: prevState.cartSubTotal,
+          orderTax: prevState.cartTax,
+          orderTotal: prevState.cartTotal
+        };
+        const orders = [order, this.spreadAllObjects(prevState.orders)];
+
+        return {
+          products,
+          orders
+        };
+      },
+      () => {
+        this.clearCart();
+        this.setState({
+          isAfterPaymentModalOpen: true,
+          paymentSuccess: true
+        });
+      }
+    );
+  };
+
+  onPaymentCancelled = () => this.setState({ paymentCancelled: true });
+
+  onPaymentError = () => this.setState({ paymentError: true });
+
   // =====
   // life cycle functions
-  componentDidMount = () => {};
-
   render() {
     const { match, history, location } = this.props;
     return (
@@ -195,9 +249,14 @@ class DataProviderWithRouter extends React.Component {
           decrementCount: this.decrementCount,
           removeItem: this.removeItem,
           clearCart: this.clearCart,
+          // after payment methods
+          onPaymentSuccess: this.onPaymentSuccess,
+          onPaymentCancelled: this.onPaymentCancelled,
+          onPaymentError: this.onPaymentError,
           // modal window methods
           openModal: this.openModal,
           closeModal: this.closeModal,
+          clearPaymentInfo: this.clearPaymentInfo,
           // ===== from withRouter =====
           match: match,
           history: history,
