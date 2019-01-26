@@ -5,9 +5,9 @@ import PayPalButton from "../PayPalButton";
 const CartTotals = ({ value }) => {
   const { cartSubTotal, cartTax, cartTotal, clearCart } = value;
   return (
-    <div className="container">
+    <div className="container-fluid">
       <div className="row">
-        <div className="col-10 col-sm-8 mt-2 ml-sm-5 ml-md-auto text-right text-capitalize">
+        <div className="col-10 col-sm-8 mt-2 ml-sm-5 ml-md-auto text-sm-center text-md-center text-lg-right text-capitalize">
           <Link to="/">
             <button
               className="btn btn-outline-danger text-uppercase mb-3 px-5"
