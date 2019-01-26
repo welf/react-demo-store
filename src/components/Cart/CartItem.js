@@ -31,7 +31,7 @@ const CartItem = ({ item, value }) => {
         <div className="d-flex justify-content-center">
           <span
             className="btn btn-black mx-1"
-            onClick={() => decrementCount(id, history)}
+            onClick={() => decrementCount(id, () => history.push("/"))}
           >
             -
           </span>
@@ -46,7 +46,7 @@ const CartItem = ({ item, value }) => {
       </div>
       {/* end of increment and decrement buttons */}
       <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
-        <div onClick={() => removeItem(id, history)}>
+        <div onClick={() => removeItem(id, () => history.push("/"))}>
           <i className="fas fa-trash-alt remove-item" />
         </div>
       </div>

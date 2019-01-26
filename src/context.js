@@ -147,7 +147,7 @@ class DataProviderWithRouter extends React.Component {
     );
   };
 
-  decrementCount = (id, history) => {
+  decrementCount = (id, callBackIfCartIsEmpty) => {
     this.setState(
       prevState => {
         const products = this.decreaseCount(prevState.products, id);
@@ -162,13 +162,13 @@ class DataProviderWithRouter extends React.Component {
       () => {
         this.updateCartTotals();
         if (this.state.cart.length === 0) {
-          history.push("/");
+          callBackIfCartIsEmpty();
         }
       }
     );
   };
 
-  removeItem = (id, history) => {
+  removeItem = (id, callBackIfCartIsEmpty) => {
     this.setState(
       prevState => {
         const products = prevState.products.map(product => {
@@ -184,7 +184,7 @@ class DataProviderWithRouter extends React.Component {
       () => {
         this.updateCartTotals();
         if (this.state.cart.length === 0) {
-          history.push("/");
+          callBackIfCartIsEmpty();
         }
       }
     );
