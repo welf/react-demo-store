@@ -66,12 +66,11 @@ class DataProviderWithRouter extends React.Component {
 
   updateCartTotals = () => {
     this.setState(prevState => {
-      const cartSubTotal = prevState.cart.reduce(
-        (accumulator, product) => accumulator + product.total,
-        0
-      );
-      const cartTax = cartSubTotal * this._tax;
-      const cartTotal = cartSubTotal + cartTax;
+      const cartSubTotal = +prevState.cart
+        .reduce((accumulator, product) => accumulator + product.total, 0)
+        .toFixed(2);
+      const cartTax = +(cartSubTotal * this._tax).toFixed(2);
+      const cartTotal = +(cartSubTotal + cartTax).toFixed(2);
 
       return {
         cartSubTotal,
@@ -97,6 +96,10 @@ class DataProviderWithRouter extends React.Component {
       paymentCancelled: false
     });
 
+  updateLocalStorage = () => {
+    localStorage.setItem("state", JSON.stringify(this.state));
+  };
+
   // =====
   // functions for other components
   addToCart = id => {
@@ -110,7 +113,10 @@ class DataProviderWithRouter extends React.Component {
 
         return { products, cart };
       },
-      () => this.updateCartTotals()
+      async () => {
+        await this.updateCartTotals();
+        this.updateLocalStorage();
+      }
     );
   };
 
@@ -138,16 +144,16 @@ class DataProviderWithRouter extends React.Component {
         const products = this.increaseCount(prevState.products, id);
         const cart = this.increaseCount(prevState.cart, id);
 
-        return {
-          products,
-          cart
-        };
+        return { products, cart };
       },
-      () => this.updateCartTotals()
+      async () => {
+        await this.updateCartTotals();
+        this.updateLocalStorage();
+      }
     );
   };
 
-  decrementCount = (id, callBackIfCartIsEmpty) => {
+  decrementCount = (id, callbackFnIfCartIsEmpty) => {
     this.setState(
       prevState => {
         const products = this.decreaseCount(prevState.products, id);
@@ -159,16 +165,15 @@ class DataProviderWithRouter extends React.Component {
           cart: filteredCart
         };
       },
-      () => {
-        this.updateCartTotals();
-        if (this.state.cart.length === 0) {
-          callBackIfCartIsEmpty();
-        }
+      async () => {
+        await this.updateCartTotals();
+        if (this.state.cart.length === 0) callbackFnIfCartIsEmpty();
+        this.updateLocalStorage();
       }
     );
   };
 
-  removeItem = (id, callBackIfCartIsEmpty) => {
+  removeItem = (id, callbackFnIfCartIsEmpty) => {
     this.setState(
       prevState => {
         const products = prevState.products.map(product => {
@@ -181,27 +186,31 @@ class DataProviderWithRouter extends React.Component {
 
         return { products, cart };
       },
-      () => {
-        this.updateCartTotals();
-        if (this.state.cart.length === 0) {
-          callBackIfCartIsEmpty();
-        }
+      async () => {
+        await this.updateCartTotals();
+        if (this.state.cart.length === 0) callbackFnIfCartIsEmpty();
+        this.updateLocalStorage();
       }
     );
   };
 
   clearCart = () => {
-    this.setState(prevState => {
-      const products = this.removeAllProductsFromCart(prevState.products);
+    this.setState(
+      prevState => {
+        const products = this.removeAllProductsFromCart(prevState.products);
 
-      return {
-        products,
-        cart: [],
-        cartSubTotal: 0,
-        cartTax: 0,
-        cartTotal: 0
-      };
-    });
+        return {
+          products,
+          cart: [],
+          cartSubTotal: 0,
+          cartTax: 0,
+          cartTotal: 0
+        };
+      },
+      () => {
+        this.updateLocalStorage();
+      }
+    );
   };
 
   onPaymentSuccess = ({ payerID, paymentID, paymentToken, email, address }) => {
@@ -229,12 +238,13 @@ class DataProviderWithRouter extends React.Component {
           orders
         };
       },
-      () => {
-        this.clearCart();
-        this.setState({
+      async () => {
+        await this.clearCart();
+        await this.setState({
           isAfterPaymentModalOpen: true,
           paymentSuccess: true
         });
+        this.updateLocalStorage();
       }
     );
   };
@@ -245,6 +255,13 @@ class DataProviderWithRouter extends React.Component {
 
   // =====
   // life cycle functions
+
+  componentDidMount = () => {
+    const state = JSON.parse(localStorage.getItem("state"));
+    if (state) this.setState(state);
+    console.log("componentDidMount()");
+  };
+
   render() {
     const { match, history, location } = this.props;
     return (
