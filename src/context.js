@@ -96,7 +96,16 @@ class DataProviderWithRouter extends React.Component {
       paymentCancelled: false
     });
 
-  updateLocalStorage = () => {
+  showCartItemsInTitle = () =>
+    this.state.cart.length === 0
+      ? ""
+      : ` (in cart: ${this.state.cart.reduce(
+          (total, product) => total + product.count,
+          0
+        )})`;
+
+  updateLocalStorageAndTitle = () => {
+    document.title = `React Store${this.showCartItemsInTitle()}`;
     localStorage.setItem("state", JSON.stringify(this.state));
   };
 
@@ -115,7 +124,7 @@ class DataProviderWithRouter extends React.Component {
       },
       async () => {
         await this.updateCartTotals();
-        this.updateLocalStorage();
+        this.updateLocalStorageAndTitle();
       }
     );
   };
@@ -148,7 +157,7 @@ class DataProviderWithRouter extends React.Component {
       },
       async () => {
         await this.updateCartTotals();
-        this.updateLocalStorage();
+        this.updateLocalStorageAndTitle();
       }
     );
   };
@@ -168,7 +177,7 @@ class DataProviderWithRouter extends React.Component {
       async () => {
         await this.updateCartTotals();
         if (this.state.cart.length === 0) callbackFnIfCartIsEmpty();
-        this.updateLocalStorage();
+        this.updateLocalStorageAndTitle();
       }
     );
   };
@@ -189,7 +198,7 @@ class DataProviderWithRouter extends React.Component {
       async () => {
         await this.updateCartTotals();
         if (this.state.cart.length === 0) callbackFnIfCartIsEmpty();
-        this.updateLocalStorage();
+        this.updateLocalStorageAndTitle();
       }
     );
   };
@@ -208,7 +217,7 @@ class DataProviderWithRouter extends React.Component {
         };
       },
       () => {
-        this.updateLocalStorage();
+        this.updateLocalStorageAndTitle();
       }
     );
   };
@@ -244,7 +253,7 @@ class DataProviderWithRouter extends React.Component {
           isAfterPaymentModalOpen: true,
           paymentSuccess: true
         });
-        this.updateLocalStorage();
+        this.updateLocalStorageAndTitle();
       }
     );
   };
@@ -256,10 +265,12 @@ class DataProviderWithRouter extends React.Component {
   // =====
   // life cycle functions
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     const state = JSON.parse(localStorage.getItem("state"));
-    if (state) this.setState(state);
-    console.log("componentDidMount()");
+    if (state) {
+      await this.setState(state);
+      document.title = `React Store${this.showCartItemsInTitle()}`;
+    }
   };
 
   render() {
