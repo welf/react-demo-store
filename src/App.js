@@ -2,15 +2,21 @@ import React from 'react';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from './components/Navbar';
-import ProductList from './components/ProductList';
-import Details from './components/Details';
-import Cart from './components/Cart';
-import Default from './components/Default';
-import Modal from './components/Modal';
 import { withDataConsumer } from './hoc-helpers';
 import { Switch, Route } from 'react-router-dom';
-import PaymentNotification from './components/PaymentNotification';
+import asyncComponent from './components/AsyncComponent';
+
+const AsyncNavbar = asyncComponent(() => import('./components/Navbar'));
+const AsyncProductList = asyncComponent(() =>
+  import('./components/ProductList')
+);
+const AsyncDetails = asyncComponent(() => import('./components/Details'));
+const AsyncCart = asyncComponent(() => import('./components/Cart'));
+const AsyncDefault = asyncComponent(() => import('./components/Default'));
+const AsyncModal = asyncComponent(() => import('./components/Modal'));
+const AsyncPaymentNotification = asyncComponent(() =>
+  import('./components/PaymentNotification')
+);
 
 const App = ({
   isModalOpen,
@@ -20,20 +26,20 @@ const App = ({
 }) => {
   return (
     <React.Fragment>
-      <Navbar />
+      <AsyncNavbar />
       <Switch>
-        <Route exact path="/" component={ProductList} />
+        <Route exact path="/" component={AsyncProductList} />
         <Route
           path="/details/:id"
-          render={({ match }) => <Details id={match.params.id} />}
+          render={({ match }) => <AsyncDetails id={match.params.id} />}
         />
-        <Route path="/cart" component={Cart} />
-        <Route component={Default} />
+        <Route path="/cart" component={AsyncCart} />
+        <Route component={AsyncDefault} />
       </Switch>
       {isModalOpen ? (
-        <Modal />
+        <AsyncModal />
       ) : paymentSuccess || paymentCancelled || paymentError ? (
-        <PaymentNotification />
+        <AsyncPaymentNotification />
       ) : null}
     </React.Fragment>
   );
