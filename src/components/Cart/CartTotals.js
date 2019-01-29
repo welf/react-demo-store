@@ -1,9 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import PayPalButton from "../PayPalButton";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const CartTotals = ({ value }) => {
-  const { cartSubTotal, cartTax, cartTotal, clearCart } = value;
+import PayPalButton from '../PayPalButton';
+import { withDataConsumer } from '../../hoc-helpers';
+
+const CartTotals = ({ cartSubTotal, cartTax, cartTotal, clearCart }) => {
   return (
     <div className="container-fluid">
       <div className="row">
@@ -29,11 +30,20 @@ const CartTotals = ({ value }) => {
             <span className="text-title">total: </span>
             <strong>$ {cartTotal.toFixed(2)}</strong>
           </h5>
-          <PayPalButton value={value} />
+          <PayPalButton />
         </div>
       </div>
     </div>
   );
 };
 
-export default CartTotals;
+const mapDataToCartTotalsProps = data => {
+  return {
+    cartSubTotal: data.cartSubTotal,
+    cartTax: data.cartTax,
+    cartTotal: data.cartTotal,
+    clearCart: data.clearCart
+  };
+};
+
+export default withDataConsumer(mapDataToCartTotalsProps)(CartTotals);

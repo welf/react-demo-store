@@ -1,15 +1,16 @@
-import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const Product = ({ product, addToCart, openModal }) => {
   const { id, title, img, price, inCart } = product;
+
   return (
     <ProductCard className="mx-auto col-9 col-md-6 col-lg-3 my-3">
       <div className="card">
         <div className="img-and-button-container">
-          <Link to={"/details/" + id}>
+          <Link to={'/details/' + id}>
             <div className="img-container p-5">
               <img src={img} alt={title} className="card-img-top" />
             </div>
@@ -50,7 +51,9 @@ Product.propTypes = {
     img: PropTypes.string,
     price: PropTypes.number,
     inCart: PropTypes.bool
-  }).isRequired
+  }).isRequired,
+  addToCart: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired
 };
 
 const ProductCard = styled.div`

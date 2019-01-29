@@ -1,21 +1,21 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
+import React from 'react';
+import { withRouter } from 'react-router-dom';
 
-import { storeProducts } from "./data";
+import { storeProducts } from './data';
 
 const DataStore = React.createContext();
 
 const initialProductsState = storeProducts.map(item => ({ ...item }));
 
-class DataProviderWithRouter extends React.Component {
+class DataStoreProvider extends React.Component {
   state = {
     products: initialProductsState,
     cart: [],
     orders: [],
-    isAfterPaymentModalOpen: false,
     paymentSuccess: false,
     paymentCancelled: false,
     paymentError: false,
+    isAfterPaymentModalOpen: false,
     isModalOpen: false,
     productInModal: null,
     cartSubTotal: 0,
@@ -96,17 +96,18 @@ class DataProviderWithRouter extends React.Component {
       paymentCancelled: false
     });
 
-  showCartItemsInTitle = () =>
-    this.state.cart.length === 0
-      ? ""
+  showCartItemsInTitle = () => {
+    return this.state.cart.length === 0
+      ? ''
       : ` (in cart: ${this.state.cart.reduce(
           (total, product) => total + product.count,
           0
         )})`;
+  };
 
   updateLocalStorageAndTitle = () => {
     document.title = `React Store${this.showCartItemsInTitle()}`;
-    localStorage.setItem("state", JSON.stringify(this.state));
+    localStorage.setItem('state', JSON.stringify(this.state));
   };
 
   // =====
@@ -266,15 +267,22 @@ class DataProviderWithRouter extends React.Component {
   // life cycle functions
 
   componentDidMount = async () => {
-    const state = JSON.parse(localStorage.getItem("state"));
+    const state = JSON.parse(localStorage.getItem('state'));
     if (state) {
-      await this.setState(state);
+      await this.setState({
+        ...state,
+        paymentSuccess: false,
+        paymentCancelled: false,
+        paymentError: false,
+        isAfterPaymentModalOpen: false,
+        isModalOpen: false,
+        productInModal: null
+      });
       document.title = `React Store${this.showCartItemsInTitle()}`;
     }
   };
 
   render() {
-    const { match, history, location } = this.props;
     return (
       <DataStore.Provider
         value={{
@@ -296,9 +304,7 @@ class DataProviderWithRouter extends React.Component {
           closeModal: this.closeModal,
           clearPaymentInfo: this.clearPaymentInfo,
           // ===== from withRouter =====
-          match: match,
-          history: history,
-          location: location
+          ...this.props
         }}
       >
         {this.props.children}
@@ -308,6 +314,6 @@ class DataProviderWithRouter extends React.Component {
 }
 
 const DataConsumer = DataStore.Consumer;
-const DataProvider = withRouter(DataProviderWithRouter);
+const DataProvider = withRouter(DataStoreProvider);
 
 export { DataProvider, DataConsumer };

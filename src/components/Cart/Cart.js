@@ -1,31 +1,29 @@
-import React from "react";
-import Title from "../Title";
-import CartColumns from "./CartColumns";
-import { DataConsumer } from "../../context";
-import EmptyCart from "./EmptyCart";
-import CartList from "./CartList";
-import CartTotals from "./CartTotals";
+import React from 'react';
+import Title from '../Title';
+import CartColumns from './CartColumns';
+import { withDataConsumer } from '../../hoc-helpers';
+import EmptyCart from './EmptyCart';
+import CartList from './CartList';
+import CartTotals from './CartTotals';
 
-const Cart = () => {
+const Cart = ({ cart }) => {
+  if (cart.length === 0) {
+    return <EmptyCart />;
+  }
   return (
     <section>
-      <DataConsumer>
-        {value => {
-          if (value.cart.length === 0) {
-            return <EmptyCart />;
-          }
-          return (
-            <React.Fragment>
-              <Title name="your" title="cart" />
-              <CartColumns />
-              <CartList value={value} />
-              <CartTotals value={value} />
-            </React.Fragment>
-          );
-        }}
-      </DataConsumer>
+      <Title name="your" title="cart" />
+      <CartColumns />
+      <CartList />
+      <CartTotals />
     </section>
   );
 };
 
-export default Cart;
+const mapDataToCartProps = data => {
+  return {
+    cart: data.cart
+  };
+};
+
+export default withDataConsumer(mapDataToCartProps)(Cart);

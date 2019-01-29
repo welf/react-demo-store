@@ -1,33 +1,31 @@
-import React from "react";
+import React from 'react';
 
-import Product from "./Product";
-import Title from "./Title";
-import { DataConsumer } from "../context";
+import Product from './Product';
+import Title from './Title';
+import withDataConsumer from '../hoc-helpers/withDataConsumer';
 
-const ProductList = () => {
+const ProductList = props => {
+  const { products } = props;
+  const listOfProducts = products.map(product => (
+    <Product key={product.id} product={product} {...props} />
+  ));
+
   return (
     <section className="py-5">
       <div className="container">
         <Title name="our" title="products" />
-        <div className="row">
-          <DataConsumer>
-            {({ products, addToCart, openModal }) =>
-              products.map(product => {
-                return (
-                  <Product
-                    key={product.id}
-                    product={product}
-                    addToCart={addToCart}
-                    openModal={openModal}
-                  />
-                );
-              })
-            }
-          </DataConsumer>
-        </div>
+        <div className="row">{listOfProducts}</div>
       </div>
     </section>
   );
 };
 
-export default ProductList;
+const mapDataToProductListProps = data => {
+  return {
+    products: data.products,
+    addToCart: data.addToCart,
+    openModal: data.openModal
+  };
+};
+
+export default withDataConsumer(mapDataToProductListProps)(ProductList);

@@ -1,14 +1,20 @@
-import React from "react";
-import CartItem from "./CartItem";
+import React from 'react';
 
-const CartList = ({ value }) => {
-  return (
-    <div className="container-fluid">
-      {value.cart.map(product => (
-        <CartItem key={product.id} item={product} value={value} />
-      ))}
-    </div>
-  );
+import { withDataConsumer } from '../../hoc-helpers';
+import CartItem from './CartItem';
+
+const CartList = ({ cart }) => {
+  const cartProducts = cart.map(product => (
+    <CartItem key={product.id} product={product} />
+  ));
+
+  return <div className="container-fluid">{cartProducts}</div>;
 };
 
-export default CartList;
+const mapDatatoCartListProps = data => {
+  return {
+    cart: data.cart
+  };
+};
+
+export default withDataConsumer(mapDatatoCartListProps)(CartList);

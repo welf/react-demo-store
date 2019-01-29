@@ -1,9 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const CartItem = ({ item, value }) => {
-  const { id, title, img, price, count, total } = item;
-  const { incrementCount, decrementCount, removeItem, history } = value;
+import { withDataConsumer } from '../../hoc-helpers';
+
+const CartItem = ({
+  product,
+  incrementCount,
+  decrementCount,
+  removeItem,
+  history
+}) => {
+  const { id, title, img, price, count, total } = product;
 
   return (
     <div className="row text-center text-capitalize mb-4">
@@ -13,7 +20,7 @@ const CartItem = ({ item, value }) => {
             src={img}
             alt={title}
             className="img-fluid"
-            style={{ height: "5rem", width: "auto" }}
+            style={{ height: '5rem', width: 'auto' }}
           />
         </Link>
       </div>
@@ -31,7 +38,7 @@ const CartItem = ({ item, value }) => {
         <div className="d-flex justify-content-center">
           <span
             className="btn btn-black mx-1"
-            onClick={() => decrementCount(id, () => history.push("/"))}
+            onClick={() => decrementCount(id, () => history.push('/'))}
           >
             -
           </span>
@@ -46,7 +53,7 @@ const CartItem = ({ item, value }) => {
       </div>
       {/* end of increment and decrement buttons */}
       <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
-        <div onClick={() => removeItem(id, () => history.push("/"))}>
+        <div onClick={() => removeItem(id, () => history.push('/'))}>
           <i className="fas fa-trash-alt remove-item" />
         </div>
       </div>
@@ -57,4 +64,13 @@ const CartItem = ({ item, value }) => {
   );
 };
 
-export default CartItem;
+const mapDataToCartItemProps = data => {
+  return {
+    incrementCount: data.incrementCount,
+    decrementCount: data.decrementCount,
+    removeItem: data.removeItem,
+    history: data.history
+  };
+};
+
+export default withDataConsumer(mapDataToCartItemProps)(CartItem);

@@ -1,24 +1,24 @@
-import React from "react";
-import { ModalContainer, closeIfClickIsOutOfElement } from "./ModalContainer";
-import { DataConsumer } from "../context";
+import React from 'react';
+import { ModalContainer, closeIfClickIsOutOfElement } from './ModalContainer';
+import { withDataConsumer } from '../hoc-helpers';
 
 const MessageAfterPayment = ({ status, onClick }) => {
   return (
     <React.Fragment>
       <h5
         className={`text-${
-          status === "success" ? "primary" : "danger"
+          status === 'success' ? 'primary' : 'danger'
         } text-title text-uppercase`}
       >
-        {status === "success"
-          ? "Congratulation, everything went fine!"
-          : status === "cancelled"
-          ? "You have cancelled your payment"
+        {status === 'success'
+          ? 'Congratulation, everything went fine!'
+          : status === 'cancelled'
+          ? 'You have cancelled your payment'
           : "Oops! Something went wrong. Let's try again!"}
       </h5>
       <button
         className={`btn btn-outline-${
-          status === "success" ? "primary" : "danger"
+          status === 'success' ? 'primary' : 'danger'
         } text-uppercase px-4 mt-3`}
         onClick={onClick}
       >
@@ -28,66 +28,72 @@ const MessageAfterPayment = ({ status, onClick }) => {
   );
 };
 
-const PaymentNotification = () => {
+const PaymentNotification = ({
+  closeModal,
+  clearPaymentInfo,
+  paymentSuccess,
+  paymentCancelled,
+  paymentError
+}) => {
   return (
-    <DataConsumer>
-      {({
-        closeModal,
-        clearPaymentInfo,
-        paymentSuccess,
-        paymentCancelled,
-        paymentError
-      }) => {
-        return (
-          <ModalContainer
-            onClick={event => {
-              closeIfClickIsOutOfElement(event, "modal", () => {
-                closeModal();
-                clearPaymentInfo();
-              });
-            }}
-          >
-            <div className="container">
-              <div className="row">
-                <div
-                  id="modal"
-                  className="col-8 col-md-6 col-lg-4 mx-auto text-center text-capitalize p-4"
-                >
-                  {paymentSuccess ? (
-                    <MessageAfterPayment
-                      status="success"
-                      onClick={() => {
-                        closeModal();
-                        clearPaymentInfo();
-                      }}
-                    />
-                  ) : null}
-                  {paymentCancelled ? (
-                    <MessageAfterPayment
-                      status="cancelled"
-                      onClick={() => {
-                        closeModal();
-                        clearPaymentInfo();
-                      }}
-                    />
-                  ) : null}
-                  {paymentError ? (
-                    <MessageAfterPayment
-                      status="error"
-                      onClick={() => {
-                        closeModal();
-                        clearPaymentInfo();
-                      }}
-                    />
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          </ModalContainer>
-        );
+    <ModalContainer
+      onClick={event => {
+        closeIfClickIsOutOfElement(event, 'modal', () => {
+          closeModal();
+          clearPaymentInfo();
+        });
       }}
-    </DataConsumer>
+    >
+      <div className="container">
+        <div className="row">
+          <div
+            id="modal"
+            className="col-8 col-md-6 col-lg-4 mx-auto text-center text-capitalize p-4"
+          >
+            {paymentSuccess ? (
+              <MessageAfterPayment
+                status="success"
+                onClick={() => {
+                  closeModal();
+                  clearPaymentInfo();
+                }}
+              />
+            ) : null}
+            {paymentCancelled ? (
+              <MessageAfterPayment
+                status="cancelled"
+                onClick={() => {
+                  closeModal();
+                  clearPaymentInfo();
+                }}
+              />
+            ) : null}
+            {paymentError ? (
+              <MessageAfterPayment
+                status="error"
+                onClick={() => {
+                  closeModal();
+                  clearPaymentInfo();
+                }}
+              />
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </ModalContainer>
   );
 };
 
-export default PaymentNotification;
+const mapDataToPaymentNotificationProps = data => {
+  return {
+    closeModal: data.closeModal,
+    clearPaymentInfo: data.clearPaymentInfo,
+    paymentSuccess: data.paymentSuccess,
+    paymentCancelled: data.paymentCancelled,
+    paymentError: data.paymentError
+  };
+};
+
+export default withDataConsumer(mapDataToPaymentNotificationProps)(
+  PaymentNotification
+);
