@@ -1,18 +1,23 @@
-import React from "react";
+import React from 'react';
 
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "./components/Navbar";
-import ProductList from "./components/ProductList";
-import Details from "./components/Details";
-import Cart from "./components/Cart";
-import Default from "./components/Default";
-import Modal from "./components/Modal";
-import { DataConsumer } from "./context";
-import { Switch, Route } from "react-router-dom";
-import PaymentNotification from "./components/PaymentNotification";
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Navbar from './components/Navbar';
+import ProductList from './components/ProductList';
+import Details from './components/Details';
+import Cart from './components/Cart';
+import Default from './components/Default';
+import Modal from './components/Modal';
+import { withDataConsumer } from './hoc-helpers';
+import { Switch, Route } from 'react-router-dom';
+import PaymentNotification from './components/PaymentNotification';
 
-const App = () => {
+const App = ({
+  isModalOpen,
+  paymentSuccess,
+  paymentCancelled,
+  paymentError
+}) => {
   return (
     <React.Fragment>
       <Navbar />
@@ -25,17 +30,22 @@ const App = () => {
         <Route path="/cart" component={Cart} />
         <Route component={Default} />
       </Switch>
-      <DataConsumer>
-        {({ isModalOpen, paymentSuccess, paymentCancelled, paymentError }) =>
-          isModalOpen ? (
-            <Modal />
-          ) : paymentSuccess || paymentCancelled || paymentError ? (
-            <PaymentNotification />
-          ) : null
-        }
-      </DataConsumer>
+      {isModalOpen ? (
+        <Modal />
+      ) : paymentSuccess || paymentCancelled || paymentError ? (
+        <PaymentNotification />
+      ) : null}
     </React.Fragment>
   );
 };
 
-export default App;
+const mapDataToAppProps = data => {
+  return {
+    isModalOpen: data.isModalOpen,
+    paymentSuccess: data.paymentSuccess,
+    paymentCancelled: data.paymentCancelled,
+    paymentError: data.paymentError
+  };
+};
+
+export default withDataConsumer(mapDataToAppProps)(App);
