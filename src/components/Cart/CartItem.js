@@ -13,8 +13,8 @@ const CartItem = ({
   const { id, title, img, price, count, total } = product;
 
   return (
-    <div className="row text-center text-capitalize mb-4">
-      <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
+    <div className="row d-flex align-items-center text-center text-capitalize my-3">
+      <div className="col-10 col-lg-2 my-2 mx-auto">
         <Link to={`/details/${id}`}>
           <img
             src={img}
@@ -24,17 +24,14 @@ const CartItem = ({
           />
         </Link>
       </div>
-      <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
-        <span className="d-lg-none">product: </span>
+      <div className="col-10 col-lg-2 my-1 mx-auto">
         <Link to={`/details/${id}`}>
           <span className="title-in-cart">{title}</span>
         </Link>
       </div>
-      <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
-        <span className="d-lg-none">price: </span>$ {price.toFixed(2)}
-      </div>
+      <div className="col-10 col-lg-2 my-1 mx-auto">$ {price.toFixed(2)}</div>
       {/* increment and decrement buttons */}
-      <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
+      <div className="col-10 col-lg-2 my-3 mx-auto">
         <div className="d-flex justify-content-center">
           <span
             className="btn btn-black mx-1"
@@ -52,13 +49,13 @@ const CartItem = ({
         </div>
       </div>
       {/* end of increment and decrement buttons */}
-      <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
+      <div className="col-10 col-lg-2 my-2 mx-auto">
         <div onClick={() => removeItem(id, () => history.push('/'))}>
           <i className="fas fa-trash-alt remove-item" />
         </div>
       </div>
-      <div className="col-10 col-lg-2 my-2 d-flex align-items-center justify-content-center">
-        <span className="d-lg-none">item total: </span>$ {total.toFixed(2)}
+      <div className="col-10 col-lg-2 mb-3 mx-auto font-weight-bold text-info">
+        <span className="d-lg-none mr-2">Total:</span>$ {total.toFixed(2)}
       </div>
     </div>
   );

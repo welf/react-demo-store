@@ -11,7 +11,7 @@ const Cart = ({ cart }) => {
     return <EmptyCart />;
   }
   return (
-    <section>
+    <section className="container-fluid py-3 my-2">
       <Title name="your" title="cart" />
       <CartColumns />
       <CartList />

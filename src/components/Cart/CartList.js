@@ -8,7 +8,7 @@ const CartList = ({ cart }) => {
     <CartItem key={product.id} product={product} />
   ));
 
-  return <div className="container-fluid">{cartProducts}</div>;
+  return <div>{cartProducts}</div>;
 };
 
 const mapDatatoCartListProps = data => {
